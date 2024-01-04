@@ -31,6 +31,11 @@ pip install -r requirements.txt
 python prepare.py
 ```
 
+- To get `basic summary report` of log files, run:
+```sh
+python summarize.py
+```
+
 ## Contribute
 
 It will be nice, if you open an issue first so that we can know what is going on, then, fork this repo and push in your ideas. Do not forget to add a bit of test(s) of what value you adding.

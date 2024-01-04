@@ -18,7 +18,7 @@ root
 
 
 Command-Line Interface (CLI) Usage:
-    $ pip install pyspark[sql]
+    $ pip install pyarrow pyspark[sql]
     $ python prepare.py
 
 """
@@ -86,10 +86,12 @@ print("\nStructured log entries number:", df.count())
 print(f"\nTop {SPARK_SHOW_NUM} stuctured log entries:")
 df.show(n=SPARK_SHOW_NUM, truncate=False)
 
+
 # Write structured logs dataframe
 structured_logs_path = "data/interim/structured"
 print(f"Write structured logs dataframe at {structured_logs_path}")
 df.write.mode("overwrite").parquet(structured_logs_path)
+
 
 # Stop Spark session
 spark.stop()
