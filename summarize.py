@@ -45,36 +45,13 @@ df = spark.read.parquet(structured_logs_path)
 
 # Create a summary report
 df.createOrReplaceTempView("structured_logs")
-summary_df = spark.sql(
-    """
-    SELECT
-      'Total number of log entries' AS ANALYSIS,
-      COUNT(*) AS VALUE
-    FROM structured_logs
 
-    UNION
+# Read summarize Spark SQL query
+with open("summarize.sql", "r") as query_file:
+    query = query_file.read()
 
-    SELECT
-      'Average log entry length' AS ANALYSIS,
-      AVG(log_length) AS VALUE
-    FROM structured_logs
-
-    UNION
-
-    SELECT
-      CONCAT('Total number of ', log_level, ' log entries') AS ANALYSIS,
-      COUNT(*) AS VALUE
-    FROM structured_logs
-    GROUP BY log_level
-
-    UNION
-
-    SELECT
-      'Average log message length' AS ANALYSIS,
-      AVG(log_message_length) AS VALUE
-    FROM structured_logs
-    """
-)
+# Execute summaru query
+summary_df = spark.sql(query)
 
 print("\nSummary reports:")
 summary_df.show(truncate=False)
