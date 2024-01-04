@@ -29,7 +29,11 @@ SPARK_APP_NAME = "Python-Spark-Log-Analysis"
 SPARK_SHOW_NUM = 2
 
 # Start Spark session
-spark = SparkSession.builder.appName(SPARK_APP_NAME).getOrCreate()
+spark = (
+    SparkSession.builder.appName(SPARK_APP_NAME)
+    .config("spark.sql.execution.arrow.pyspark.enabled", "true")
+    .getOrCreate()
+)
 
 
 # Load raw logs data from text files into a DataFrame
