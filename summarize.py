@@ -43,16 +43,18 @@ spark = (
 structured_logs_path = "data/interim/structured"
 df = spark.read.parquet(structured_logs_path)
 
-# Create a summary report
+
+# Create Spark view for structured logs
 df.createOrReplaceTempView("structured_logs")
 
 # Read summarize Spark SQL query
 with open("summarize.sql", "r") as query_file:
-    query = query_file.read()
+    summary_query = query_file.read()
 
-# Execute summaru query
-summary_df = spark.sql(query)
+# Execute summary query
+summary_df = spark.sql(summary_query)
 
+# Print summary report dataframe
 print("\nSummary reports:")
 summary_df.show(truncate=False)
 
