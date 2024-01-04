@@ -4,15 +4,17 @@ This script parse, format and normalize raw logs into a structured format.
 
 It convert raw text log entry into structured logs schema below:
 root
- |-- timestamp: timestamp (nullable = true)
- |-- level: string (nullable = true)
- |-- message: string (nullable = true)
- |-- year: integer (nullable = true)
- |-- month: integer (nullable = true)
- |-- day: integer (nullable = true)
- |-- hour: integer (nullable = true)
- |-- minute: integer (nullable = true)
- |-- second: integer (nullable = true)
+ |-- log_timestamp: timestamp (nullable = true)
+ |-- log_level: string (nullable = true)
+ |-- log_message: string (nullable = true)
+ |-- log_length: integer (nullable = true)
+ |-- log_year: integer (nullable = true)
+ |-- log_month: integer (nullable = true)
+ |-- log_day: integer (nullable = true)
+ |-- log_hour: integer (nullable = true)
+ |-- log_minute: integer (nullable = true)
+ |-- log_second: integer (nullable = true)
+ |-- log_message_length: integer (nullable = true)
 
 
 Command-Line Interface (CLI) Usage:
@@ -52,21 +54,25 @@ print(f"\nTop {SPARK_SHOW_NUM} raw log entries:")
 df.show(n=SPARK_SHOW_NUM, truncate=False)
 
 
-# Extract and cast log entry timestamp, level and message into their respective data types
+# Extract and cast log entry timestamp, level, message and length into
+# their respective data types
 df = df.select(
-    F.regexp_extract(F.col("text"), r"\[(.*?)\]", 1).alias("timestamp").cast(T.TimestampType()),
-    F.regexp_extract(F.col("text"), r"\] (\w+):", 1).alias("level").cast(T.StringType()),
-    F.regexp_extract(F.col("text"), r": (.*)", 1).alias("message").cast(T.StringType()),
+    F.regexp_extract(F.col("text"), r"\[(.*?)\]", 1).alias("log_timestamp").cast(T.TimestampType()),
+    F.regexp_extract(F.col("text"), r"\] (\w+):", 1).alias("log_level").cast(T.StringType()),
+    F.regexp_extract(F.col("text"), r": (.*)", 1).alias("log_message").cast(T.StringType()),
+    F.length("text").alias("log_length").cast(T.IntegerType()),
 )
 
 # Extract log entry year, month, dayofmonth, hour, minute and seconds from timestamp
+# and length of the log message
 df = (
-    df.withColumn("year", F.year(F.col("timestamp")))
-    .withColumn("month", F.month(F.col("timestamp")))
-    .withColumn("day", F.dayofmonth(F.col("timestamp")))
-    .withColumn("hour", F.hour(F.col("timestamp")))
-    .withColumn("minute", F.minute(F.col("timestamp")))
-    .withColumn("second", F.second(F.col("timestamp")))
+    df.withColumn("log_year", F.year(F.col("log_timestamp")))
+    .withColumn("log_month", F.month(F.col("log_timestamp")))
+    .withColumn("log_day", F.dayofmonth(F.col("log_timestamp")))
+    .withColumn("log_hour", F.hour(F.col("log_timestamp")))
+    .withColumn("log_minute", F.minute(F.col("log_timestamp")))
+    .withColumn("log_second", F.second(F.col("log_timestamp")))
+    .withColumn("log_message_length", F.length(F.col("log_message")))
 )
 
 # Print stuctured logs dataframe schema
