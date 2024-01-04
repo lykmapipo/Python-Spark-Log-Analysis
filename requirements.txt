@@ -1,0 +1,7 @@
+click>=8.1.7
+pyarrow>=14.0.0
+numpy>=1.24.4
+matplotlib>=3.7.3
+pandas>=2.0.3
+seaborn>=0.13.0
+pyspark[sql]>=3.5.0
