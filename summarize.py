@@ -28,12 +28,14 @@ Command-Line Interface (CLI) Usage:
 from pyspark.sql import SparkSession
 
 SPARK_APP_NAME = "Python-Spark-Log-Analysis"
+SPARK_MASTER = "local[*]"
 SPARK_SHOW_NUM = 2
 
 
 # Start Spark session
 spark = (
     SparkSession.builder.appName(SPARK_APP_NAME)
+    .master(SPARK_MASTER)
     .config("spark.sql.execution.arrow.pyspark.enabled", "true")
     .getOrCreate()
 )
