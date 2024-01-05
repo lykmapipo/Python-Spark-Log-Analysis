@@ -36,6 +36,27 @@ python prepare.py
 python summarize.py
 ```
 
+## Data
+- Check [data/raw](https://github.com/lykmapipo/Python-Spark-Log-Analysis/tree/main/data/raw) directory for all `raw logs` data. Each file is in `text format`, and each log entry is format as `[timestamp] level: message`.
+
+- Check [data/interim/structured-logs](https://github.com/lykmapipo/Python-Spark-Log-Analysis/tree/main/data/interim/structured-logs) directory for `structured logs` data generated when run `prepare.py`. Each file is in `parquet format`, and each log entry follow below `spark` schema:
+```sh
+root
+ |-- log_timestamp: timestamp (nullable = true)
+ |-- log_level: string (nullable = true)
+ |-- log_message: string (nullable = true)
+ |-- log_length: integer (nullable = true)
+ |-- log_year: integer (nullable = true)
+ |-- log_month: integer (nullable = true)
+ |-- log_day: integer (nullable = true)
+ |-- log_hour: integer (nullable = true)
+ |-- log_minute: integer (nullable = true)
+ |-- log_second: integer (nullable = true)
+ |-- log_message_length: integer (nullable = true)
+```
+
+- Check [summary report](https://github.com/lykmapipo/Python-Spark-Log-Analysis/blob/main/data/reports/summary_report.csv) generated when run `summarize.py`.
+
 ## Contribute
 
 It will be nice, if you open an issue first so that we can know what is going on, then, fork this repo and push in your ideas. Do not forget to add a bit of test(s) of what value you adding.
