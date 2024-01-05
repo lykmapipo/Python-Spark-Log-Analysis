@@ -42,7 +42,7 @@ spark = (
 
 
 # Load structure logs
-structured_logs_path = "data/interim/structured"
+structured_logs_path = "data/interim/structured-logs"
 df = spark.read.parquet(structured_logs_path)
 
 

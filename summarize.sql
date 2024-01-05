@@ -34,6 +34,22 @@ GROUP BY log_month
 UNION
 
 SELECT
+  CONCAT('Total number of log entries on ', log_day, ' day of the month') AS ANALYSIS,
+  COUNT(*) AS VALUE
+FROM structured_logs
+GROUP BY log_day
+
+UNION
+
+SELECT
+  CONCAT('Total number of log entries on ', log_hour, ' hour of the day') AS ANALYSIS,
+  COUNT(*) AS VALUE
+FROM structured_logs
+GROUP BY log_hour
+
+UNION
+
+SELECT
   'Average log entry length' AS ANALYSIS,
   AVG(log_length) AS VALUE
 FROM structured_logs

@@ -91,7 +91,7 @@ df.show(n=SPARK_SHOW_NUM, truncate=False)
 
 
 # Write structured logs dataframe
-structured_logs_path = "data/interim/structured"
+structured_logs_path = "data/interim/structured-logs"
 print(f"Write structured logs dataframe at {structured_logs_path}")
 df.write.mode("overwrite").parquet(structured_logs_path)
 
