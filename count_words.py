@@ -23,6 +23,7 @@ Command-Line Interface (CLI) Usage:
     $ python count_words.py
 
 """
+from pathlib import Path
 
 import pyspark.sql.functions as F
 from pyspark.ml import Pipeline
@@ -33,6 +34,17 @@ from sparknlp.base import DocumentAssembler
 SPARK_APP_NAME = "Python-Spark-Log-Analysis"
 SPARK_MASTER = "local[*]"
 SPARK_SHOW_NUM = 2
+
+
+def pretrained_lemmatizer(name="lemma_antbnc", lang="en"):
+    """Load or download pretrained lemmatizer."""
+    try:
+        cache_path = Path("~/cache_pretrained").expanduser().resolve()
+        models_list = list(cache_path.glob(f"{name}_{lang}*"))
+        model_path = str(models_list[0]) if models_list else None
+        return LemmatizerModel.load(model_path)
+    except Exception:
+        return LemmatizerModel.pretrained(name=name, lang=lang)
 
 
 # Start Spark session
@@ -55,7 +67,7 @@ assembler = DocumentAssembler().setInputCol("log_message").setOutputCol("documen
 tokenizer = Tokenizer().setInputCols(["document"]).setOutputCol("tokens")
 normalizer = Normalizer().setInputCols(["tokens"]).setOutputCol("normalized_tokens").setLowercase(True)
 lemmatizer = (
-    LemmatizerModel.pretrained(name="lemma_antbnc", lang="en")
+    pretrained_lemmatizer(name="lemma_antbnc", lang="en")
     .setInputCols(["normalized_tokens"])
     .setOutputCol("lemmatized_tokens")
 )

@@ -27,7 +27,7 @@ cd Python-Spark-Log-Analysis
 pip install -r requirements.txt
 ```
 
-- To `parse and prepare` log files, run:
+- To `parse and prepare` raw log files, run:
 ```sh
 python prepare.py
 ```
