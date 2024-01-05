@@ -11,6 +11,7 @@ Python scripts to process, and analyze log files using PySpark.
 - [pyarrow 14.0+](https://github.com/apache/arrow)
 - [pandas 2.0+](https://github.com/pandas-dev/pandas)
 - [pyspark 3.5+](https://github.com/apache/spark/tree/master/python)
+- [spark-nlp 5.2.2+](https://github.com/JohnSnowLabs/spark-nlp)
 
 ## Usage
 
@@ -31,9 +32,14 @@ pip install -r requirements.txt
 python prepare.py
 ```
 
-- To get `basic summary report` of log files, run:
+- To get `basic summary report` of structured logs, run:
 ```sh
 python summarize.py
+```
+
+- To perform `word frequency analysis` on structured logs, run:
+```sh
+python count_words.py
 ```
 
 ## Data
@@ -56,6 +62,8 @@ root
 ```
 
 - Check [summary report](https://github.com/lykmapipo/Python-Spark-Log-Analysis/blob/main/data/reports/summary_report.csv) generated when run `summarize.py`.
+
+- Check [word frequency analysis report](https://github.com/lykmapipo/Python-Spark-Log-Analysis/blob/main/data/reports/word_count.csv) generated when run `count_words.py`.
 
 ## Contribute
 
