@@ -1,8 +1,10 @@
 ANALYSIS,VALUE
 Total number of log entries,144.0
-Average log entry length,63.041666666666664
 Total number of INFO log entries,54.0
 Total number of DEBUG log entries,36.0
 Total number of ERROR log entries,27.0
 Total number of WARNING log entries,27.0
+Total number of log entries in 2024,144.0
+Total number of log entries on 1 month of the year,144.0
+Average log entry length,63.041666666666664
 Average log message length,34.041666666666664
