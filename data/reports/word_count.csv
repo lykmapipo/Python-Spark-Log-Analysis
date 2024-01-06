@@ -27,7 +27,6 @@ timeout,10
 invalid,10
 receive,10
 successfully,10
-new,9
 validation,9
 low,8
 inventory,8
@@ -86,10 +85,8 @@ invoice,3
 delivery,3
 latency,3
 calculate,3
-available,3
 post,3
 execute,3
-via,3
 traffic,2
 account,2
 parameter,2
@@ -127,16 +124,13 @@ restart,1
 impact,1
 attempt,1
 authenticate,1
-take,1
 deadlock,1
-may,1
 pm,1
 invalidendpoint,1
 submit,1
 utc,1
 credentials,1
 remove,1
-use,1
 encounter,1
 view,1
 history,1
@@ -145,7 +139,6 @@ corruption,1
 long,1
 activity,1
 sale,1
-consider,1
 restock,1
 retry,1
 potential,1
@@ -164,7 +157,6 @@ black,1
 delete,1
 abc,1
 crash,1
-get,1
 performance,1
 establish,1
 endpointorders,1

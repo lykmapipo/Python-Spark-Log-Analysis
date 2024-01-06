@@ -28,7 +28,13 @@ from pathlib import Path
 import pyspark.sql.functions as F
 from pyspark.ml import Pipeline
 from pyspark.sql import SparkSession
-from sparknlp.annotator import LemmatizerModel, Normalizer, StopWordsCleaner, Tokenizer
+from sparknlp.annotator import (
+    LemmatizerModel,
+    Normalizer,
+    SentenceDetector,
+    StopWordsCleaner,
+    Tokenizer,
+)
 from sparknlp.base import DocumentAssembler
 
 SPARK_APP_NAME = "Python-Spark-Log-Analysis"
@@ -36,15 +42,15 @@ SPARK_MASTER = "local[*]"
 SPARK_SHOW_NUM = 2
 
 
-def pretrained_lemmatizer(name="lemma_antbnc", lang="en"):
-    """Load or download pretrained lemmatizer."""
+def pretrained(model=LemmatizerModel, name="lemma_antbnc", lang="en"):
+    """Load or download pretrained models."""
     try:
         cache_path = Path("~/cache_pretrained").expanduser().resolve()
-        models_list = list(cache_path.glob(f"{name}_{lang}*"))
-        model_path = str(models_list[0]) if models_list else None
-        return LemmatizerModel.load(model_path)
+        models_path = cache_path.glob(f"{name}_{lang}*")
+        model_path = str(next(iter(models_path), None))
+        return model.load(str(model_path))
     except Exception:
-        return LemmatizerModel.pretrained(name=name, lang=lang)
+        return model.pretrained(name=name, lang=lang)
 
 
 # Start Spark session
@@ -63,18 +69,26 @@ df = spark.read.parquet(structured_logs_path).select("log_message")
 
 
 # Define word count NLP pipeline stages
-assembler = DocumentAssembler().setInputCol("log_message").setOutputCol("document")
-tokenizer = Tokenizer().setInputCols(["document"]).setOutputCol("tokens")
-normalizer = Normalizer().setInputCols(["tokens"]).setOutputCol("normalized_tokens").setLowercase(True)
-lemmatizer = (
-    pretrained_lemmatizer(name="lemma_antbnc", lang="en")
+documentizer = DocumentAssembler().setInputCol("log_message").setOutputCol("document")  # prepares data for NLP
+sentencizer = SentenceDetector().setInputCols(["document"]).setOutputCol("sentences")  # detects sentence boundaries
+tokenizer = Tokenizer().setInputCols(["sentences"]).setOutputCol("tokens")  # tokenizes raw text
+normalizer = (  # cleans out tokens
+    Normalizer().setInputCols(["tokens"]).setOutputCol("normalized_tokens").setLowercase(True)
+)
+lemmatizer = (  # find lemmas out of tokens
+    pretrained(model=LemmatizerModel, name="lemma_antbnc", lang="en")
     .setInputCols(["normalized_tokens"])
     .setOutputCol("lemmatized_tokens")
 )
-cleaner = StopWordsCleaner().setInputCols(["lemmatized_tokens"]).setOutputCol("cleaned_tokens").setCaseSensitive(False)
+cleaner = (  # drops all the stop words
+    pretrained(model=StopWordsCleaner, name="stopwords_en", lang="en")
+    .setInputCols(["lemmatized_tokens"])
+    .setOutputCol("cleaned_tokens")
+    .setCaseSensitive(False)
+)
 
 # Create word count NLP pipeline
-pipeline = Pipeline(stages=[assembler, tokenizer, normalizer, lemmatizer, cleaner])
+pipeline = Pipeline(stages=[documentizer, sentencizer, tokenizer, normalizer, lemmatizer, cleaner])
 
 # Fit word count NLP pipeline and tranform the log message input dataframe
 analysis_df = pipeline.fit(df).transform(df)
