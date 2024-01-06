@@ -1,39 +1,41 @@
 ANALYSIS,VALUE
-Total number of log entries,278.0
+Total number of log entries,508.0
 Total number of CRITICAL log entries,5.0
-Total number of ERROR log entries,54.0
-Total number of WARNING log entries,48.0
-Total number of INFO log entries,97.0
-Total number of DEBUG log entries,74.0
+Total number of DEBUG log entries,111.0
+Total number of INFO log entries,209.0
+Total number of ERROR log entries,103.0
+Total number of WARNING log entries,80.0
 Total number of log entries in 2023,134.0
 Total number of log entries in 2024,144.0
-Total number of log entries on 1 month of the year,278.0
-Total number of log entries on 1 day of the month,98.0
-Total number of log entries on 3 day of the month,94.0
-Total number of log entries on 2 day of the month,86.0
-Total number of log entries on 14 hour of the day,12.0
-Total number of log entries on 18 hour of the day,12.0
-Total number of log entries on 23 hour of the day,11.0
-Total number of log entries on 22 hour of the day,12.0
-Total number of log entries on 20 hour of the day,11.0
-Total number of log entries on 7 hour of the day,10.0
-Total number of log entries on 1 hour of the day,12.0
-Total number of log entries on 21 hour of the day,11.0
-Total number of log entries on 5 hour of the day,11.0
-Total number of log entries on 6 hour of the day,12.0
-Total number of log entries on 16 hour of the day,12.0
-Total number of log entries on 11 hour of the day,11.0
-Total number of log entries on 17 hour of the day,11.0
-Total number of log entries on 8 hour of the day,12.0
-Total number of log entries on 12 hour of the day,11.0
-Total number of log entries on 10 hour of the day,11.0
-Total number of log entries on 13 hour of the day,11.0
-Total number of log entries on 9 hour of the day,11.0
-Total number of log entries on 19 hour of the day,10.0
-Total number of log entries on 2 hour of the day,11.0
-Total number of log entries on 3 hour of the day,12.0
-Total number of log entries on 15 hour of the day,11.0
-Total number of log entries on 4 hour of the day,12.0
-Total number of log entries on 0 hour of the day,18.0
-Average log entry length,66.16546762589928
-Average log message length,37.115107913669064
+Total number of log entries in 2021,102.0
+Total number of log entries in 2022,128.0
+Total number of log entries on 1 month of the year,508.0
+Total number of log entries on 2 day of the month,183.0
+Total number of log entries on 3 day of the month,153.0
+Total number of log entries on 1 day of the month,172.0
+Total number of log entries on 19 hour of the day,13.0
+Total number of log entries on 2 hour of the day,50.0
+Total number of log entries on 0 hour of the day,67.0
+Total number of log entries on 9 hour of the day,14.0
+Total number of log entries on 7 hour of the day,13.0
+Total number of log entries on 12 hour of the day,14.0
+Total number of log entries on 16 hour of the day,15.0
+Total number of log entries on 13 hour of the day,14.0
+Total number of log entries on 8 hour of the day,15.0
+Total number of log entries on 4 hour of the day,16.0
+Total number of log entries on 3 hour of the day,51.0
+Total number of log entries on 1 hour of the day,53.0
+Total number of log entries on 6 hour of the day,15.0
+Total number of log entries on 22 hour of the day,15.0
+Total number of log entries on 18 hour of the day,15.0
+Total number of log entries on 23 hour of the day,15.0
+Total number of log entries on 15 hour of the day,14.0
+Total number of log entries on 5 hour of the day,14.0
+Total number of log entries on 20 hour of the day,14.0
+Total number of log entries on 17 hour of the day,14.0
+Total number of log entries on 21 hour of the day,14.0
+Total number of log entries on 14 hour of the day,15.0
+Total number of log entries on 11 hour of the day,14.0
+Total number of log entries on 10 hour of the day,14.0
+Average log entry length,70.01968503937007
+Average log message length,41.08661417322835

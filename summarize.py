@@ -38,7 +38,6 @@ spark = (
     SparkSession.builder.appName(SPARK_APP_NAME)
     .master(SPARK_MASTER)
     .config("spark.sql.execution.arrow.pyspark.enabled", "true")
-    .config("spark.jars.packages", f"com.johnsnowlabs.nlp:spark-nlp_{SPARK_NLP_VERSION}")
     .getOrCreate()
 )
 

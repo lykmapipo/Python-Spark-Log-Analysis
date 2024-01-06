@@ -39,6 +39,7 @@ from sparknlp.base import DocumentAssembler
 
 SPARK_APP_NAME = "Python-Spark-Log-Analysis"
 SPARK_MASTER = "local[*]"
+SPARK_NLP_VERSION = "2.12:5.2.2"
 SPARK_SHOW_NUM = 2
 
 
@@ -58,7 +59,7 @@ spark = (
     SparkSession.builder.appName(SPARK_APP_NAME)
     .master(SPARK_MASTER)
     .config("spark.sql.execution.arrow.pyspark.enabled", "true")
-    .config("spark.jars.packages", "com.johnsnowlabs.nlp:spark-nlp_2.12:5.2.2")
+    .config("spark.jars.packages", f"com.johnsnowlabs.nlp:spark-nlp_{SPARK_NLP_VERSION}")
     .getOrCreate()
 )
 
