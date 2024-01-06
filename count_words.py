@@ -31,7 +31,7 @@ from pyspark.sql import SparkSession
 from sparknlp.annotator import (
     LemmatizerModel,
     Normalizer,
-    SentenceDetector,
+    SentenceDetectorDLModel,
     StopWordsCleaner,
     Tokenizer,
 )
@@ -71,8 +71,14 @@ df = spark.read.parquet(structured_logs_path).select("log_message")
 
 # Define word count NLP pipeline stages
 documentizer = DocumentAssembler().setInputCol("log_message").setOutputCol("document")  # prepares data for NLP
-sentencizer = SentenceDetector().setInputCols(["document"]).setOutputCol("sentences")  # detects sentence boundaries
-tokenizer = Tokenizer().setInputCols(["sentences"]).setOutputCol("tokens")  # tokenizes raw text
+sentencizer = (  # detects sentence boundaries
+    pretrained(model=SentenceDetectorDLModel, name="sentence_detector_dl", lang="en")
+    .setInputCols(["document"])
+    .setOutputCol("sentences")
+)
+tokenizer = (  # tokenizes raw text
+    Tokenizer().setInputCols(["sentences"]).setOutputCol("tokens").setSplitChars(["#", "=", "_", "/", "@", "."])
+)
 normalizer = (  # cleans out tokens
     Normalizer().setInputCols(["tokens"]).setOutputCol("normalized_tokens").setLowercase(True)
 )
