@@ -2,7 +2,7 @@
 
 Python scripts to process, and analyze log files using PySpark.
 
-> 👋 This repository's maintainer is available to hire for Python/PySpark consulting projects. To get a cost estimate, send email to lallyelias87@gmail.com (for projects of any size or complexity).
+> 👋 This repository's maintainer is available to hire for Python/PySpark/Spark NLP consulting projects. To get a cost estimate, send email to lallyelias87@gmail.com (for projects of any size or complexity).
 
 ## Requirements
 
@@ -42,6 +42,11 @@ python summarize.py
 python count_words.py
 ```
 
+- To perform `keyword extraction analysis` on structured logs, run:
+```sh
+python keywords.py
+```
+
 ## Data
 - Check [data/raw](https://github.com/lykmapipo/Python-Spark-Log-Analysis/tree/main/data/raw) directory for all `raw logs` data. Each file is in `text format`, and each log entry is format as `[timestamp] level: message`.
 
@@ -64,6 +69,8 @@ root
 - Check [summary report](https://github.com/lykmapipo/Python-Spark-Log-Analysis/blob/main/data/reports/summary_report.csv) generated when run `summarize.py`.
 
 - Check [word frequency analysis report](https://github.com/lykmapipo/Python-Spark-Log-Analysis/blob/main/data/reports/word_count.csv) generated when run `count_words.py`.
+
+- Check [keywords extraction analysis report](https://github.com/lykmapipo/Python-Spark-Log-Analysis/blob/main/data/reports/keywords.csv) generated when run `keywords.py`.
 
 ## Contribute
 

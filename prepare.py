@@ -77,6 +77,7 @@ df = (
     .withColumn("log_second", F.second(F.col("log_timestamp")))
     .withColumn("log_message_length", F.length(F.col("log_message")))
 )
+# TODO: use timestamp as log_id
 
 # Print stuctured logs dataframe schema
 print("\n\nStructured logs dataframe schema:")

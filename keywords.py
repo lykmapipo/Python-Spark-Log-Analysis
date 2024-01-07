@@ -1,26 +1,12 @@
-"""Count word on structured log messages.
+"""Extract keywords from structured log messages.
 
-This script perform word frequency analysis on the `log_message`
-of the structured logs.
-
-It uses the structured logs schema below:
-root
- |-- log_timestamp: timestamp (nullable = true)
- |-- log_level: string (nullable = true)
- |-- log_message: string (nullable = true)
- |-- log_length: integer (nullable = true)
- |-- log_year: integer (nullable = true)
- |-- log_month: integer (nullable = true)
- |-- log_day: integer (nullable = true)
- |-- log_hour: integer (nullable = true)
- |-- log_minute: integer (nullable = true)
- |-- log_second: integer (nullable = true)
- |-- log_message_length: integer (nullable = true)
+This script perform keywords extraction analysis on the `log_message`
+of the structured logs using YAKE algorithm.
 
 
 Command-Line Interface (CLI) Usage:
     $ pip install pandas pyarrow pyspark[sql] spark-nlp
-    $ python count_words.py
+    $ python keywords.py
 
 """
 from pathlib import Path
@@ -34,6 +20,7 @@ from sparknlp.annotator import (
     SentenceDetectorDLModel,
     StopWordsCleaner,
     Tokenizer,
+    YakeKeywordExtraction,
 )
 from sparknlp.base import DocumentAssembler
 
@@ -43,7 +30,7 @@ SPARK_NLP_VERSION = "2.12:5.2.2"
 SPARK_SHOW_NUM = 2
 
 
-def pretrained(model=None, name=None, lang="en"):
+def pretrained(model=LemmatizerModel, name=None, lang="en"):
     """Load or download pretrained models."""
     try:
         cache_path = Path("~/cache_pretrained").expanduser().resolve()
@@ -67,9 +54,10 @@ spark = (
 # Load structure logs
 structured_logs_path = "data/interim/structured-logs"
 df = spark.read.parquet(structured_logs_path).select("log_message")
+# TODO: include other fields to futher analysis
 
 
-# Define word count NLP pipeline stages
+# Define keywords extraction NLP pipeline stages
 documentizer = DocumentAssembler().setInputCol("log_message").setOutputCol("document")  # prepares data for NLP
 sentencizer = (  # detects sentence boundaries
     pretrained(model=SentenceDetectorDLModel, name="sentence_detector_dl", lang="en")
@@ -94,29 +82,49 @@ cleaner = (  # drops all the stop words
     .setCaseSensitive(False)
 )
 
-# Create word count NLP pipeline
-pipeline = Pipeline(stages=[documentizer, sentencizer, tokenizer, normalizer, lemmatizer, cleaner])
-
-# Fit word count NLP pipeline and tranform the log message input dataframe
-analysis_df = pipeline.fit(df).transform(df)
-
-# Count words of log messages
-word_count_df = (
-    analysis_df.select(F.explode(F.col("cleaned_tokens.result")).alias("word"))
-    .groupBy(F.col("word"))
-    .count()
-    .alias("count")
-    .orderBy(F.col("count"), ascending=False)
+keywordizer = (  # Extract keywords
+    YakeKeywordExtraction()
+    .setInputCols(["cleaned_tokens"])
+    .setOutputCol("keywords")
+    .setMinNGrams(2)
+    .setMaxNGrams(3)
+    .setThreshold(-1)
+    .setWindowSize(3)
+    .setNKeywords(30)
 )
 
-print("\nTop 20 word in log entry messages:")
-word_count_df.show(n=20, truncate=False)
+# Create keywords extraction NLP pipeline
+pipeline = Pipeline(stages=[documentizer, sentencizer, tokenizer, normalizer, lemmatizer, cleaner, keywordizer])
 
+# Fit keyword extraction NLP pipeline and tranform the log message input dataframe
+analysis_df = pipeline.fit(df).transform(df)
 
-# Write word count report dataframe
-word_count_path = "data/reports/word_count.csv"
-print(f"Write word count report dataframe at {word_count_path}")
-word_count_df.toPandas().to_csv(word_count_path, header=True, index=False)
+# Get extracted keywords of log messages
+keywords_df = (
+    analysis_df.select(
+        F.col("log_message").alias("log_message"),
+        F.col("keywords").alias("keywords"),
+    )
+    .select(
+        F.col("log_message").alias("log_message"),
+        F.explode(F.col("keywords")).alias("keywords"),
+    )
+    .select(
+        F.col("log_message").alias("log_message"),
+        F.col("keywords.result").alias("keywords"),
+        F.col("keywords.metadata").getItem("score").alias("score"),
+    )
+)
+
+print("\nSample keywords in each log entry messages:")
+keywords_df.show(n=20, truncate=False)
+
+# TODO: count unique keywords
+
+# Write keywords extraction report dataframe
+keywords_path = "data/reports/keywords.csv"
+print(f"Write keywords report dataframe at {keywords_path}")
+keywords_df.toPandas().to_csv(keywords_path, header=True, index=False)
 
 
 # Stop Spark session
