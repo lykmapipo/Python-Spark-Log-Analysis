@@ -37,6 +37,7 @@ spark = (
     SparkSession.builder.appName(SPARK_APP_NAME)
     .master(SPARK_MASTER)
     .config("spark.sql.execution.arrow.pyspark.enabled", "true")
+    .config("spark.sql.execution.arrow.pyspark.fallback.enabled", "true")
     .getOrCreate()
 )
 
